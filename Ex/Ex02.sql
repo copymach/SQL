@@ -104,9 +104,9 @@ where department_id = 100
 SELECT  sysdate,
         to_char(sysdate, 'yYYy-mm-dd'),
         to_char(sysdate, 'YY-mm-dd day HH24:MI:SS'),
-        to_char(sysdate, 'YY"년"mm"월"dd"일"(dy) HH24:MI:SS'),
+        to_char(sysdate, 'YY"년"mm"월"dd"일"(dy) HH24:MI:SS'), 
         to_char(sysdate, 'month'), -- '12월' 형식 표시
-        to_char(sysdate, 'day'), -- '목요일' 형식 표시    
+        to_char(sysdate, 'day'), -- 요일 dy 목, day'목요일' 형식 표시    
         to_char(sysdate, 'MI'), -- 분 표시
         to_char(sysdate, 'SS') --초 표시
 FROM dual;
