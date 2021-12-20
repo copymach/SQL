@@ -92,6 +92,16 @@ order by reg.region_name asc, coun.country_name desc
 (37건)*/
 
 
+SELECT  em1.first_name, 
+        em1.hire_date, 
+        em2.manager_id, 
+        em2.hire_date
+FROM employees em1, employees em2
+where em1.hire_date < em2.hire_date
+and em1.manager_id = em2.employee_id
+; --성공 
+
+
 SELECT  *
 FROM employees em, departments de
 where em.hire_date < (
@@ -102,7 +112,7 @@ where em.hire_date < (
 
     
     )
-;  --모르겠다
+;  --실패한 코드 
 
 
     
@@ -166,7 +176,10 @@ SELECT
     and de.location_id = lo.location_id    
     and lo.country_id = coun.country_id
     and coun.region_id = reg.region_id
-; --문제가 잘 이해안된다.
+    and em.employee_id = de.manager_id
+; -- 막줄 and em.employee_id = de.manager_id 추가해서 성공
+
+
 
 
 /*문제9.
