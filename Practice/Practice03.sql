@@ -178,7 +178,7 @@ SELECT
     and coun.region_id = reg.region_id
     and em.employee_id = de.manager_id
 ; -- 막줄 and em.employee_id = de.manager_id 추가해서 성공
-
+--카디전 프로덕트 카티션 프로덕트(Cartesian Product)
 
 
 
