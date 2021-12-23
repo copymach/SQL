@@ -77,6 +77,7 @@ nocache
 ;
 --id 번호 자동생성 꼬일때 리셋
 drop SEQUENCE seq_book_id; 
+drop SEQUENCE seq_author_id; 
 drop table book;
 
 --책정보 입력하기 (자동생성 책id, 책제목, 출판사, 출판일, 저자id) 
@@ -96,16 +97,20 @@ INSERT INTO book VALUES (seq_book_id.nextval, '오직두사람', '문학동네',
 
 INSERT INTO book VALUES (seq_book_id.nextval, '26년', '재미주의', '20120204', 5);
 
+
+
 INSERT INTO book VALUES (seq_book_id.nextval, 'title', 'pub', '20120815', id);
 
 
 -- 책 정보 보기
 SELECT    * FROM book;
 
--- 입력해놓은 저자 정보 보기
+-- 저자 정보 보기
 SELECT    * FROM author;
 
-
+-- 모든 정보 보기 (카디전)
+SELECT    * FROM book, author
+    where book.author_id = author.author_id;
 
 --강풀(id 5번)의 author_desc 를 서울 특별시로 변경하기
 UPDATE author
@@ -115,8 +120,15 @@ WHERE author_id = 5 ;
 set author_desc = '1세대 온라인 만화가'
 
 --author 테이블에서 기안84(id 4) 데이터를 삭제해 보세요
-TRUNCATE TABLE author WHERE author_id = 4;
+TRUNCATE TABLE author WHERE author_id = 2;
+
+DELETE FROM book WHERE author_id = 1 ;
 
 DELETE FROM author WHERE author_id = 4 ;
 --포린키 때문에 삭제가 안된다 무슨 방법이 없을까?
+
+
+--커밋 
+commit;
+
 
