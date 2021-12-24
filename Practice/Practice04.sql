@@ -35,17 +35,29 @@ order by salary asc
 직원중 Steven(first_name) king(last_name)이 소속된 부서(departments)가 있는 곳의 주소를 알아보려고 한다.
 도시아이디(location_id), 거리명(street_address), 우편번호(postal_code), 도시명(city), 주(state_province), 나라아이디(country_id) 를 출력하세요
 (1건) */
+
+
  
 SELECT em.first_name, de.location_id, lo.street_address, lo.postal_code, lo.city, lo.state_province
+FROM employees em, departments de, locations lo
+where de.department_id = em.department_id
+and de.location_id = lo.location_id
+and first_name = 'Steven'
+and last_name = 'King'
+; -- 정상동작하게 수정 성공
+
+ 
+SELECT de.department_id, em.first_name, de.location_id, lo.street_address, lo.postal_code, lo.city, lo.state_province
 FROM employees em, departments de, locations lo
 where em.department_id = (
                         SELECT  department_id
                         FROM employees
-                        where first_name in ('Steven')
-                        and last_name in ('King') )
+                        where first_name in 'Steven'
+                        and last_name in 'King' )
 and de.department_id = em.department_id
 and de.location_id = lo.location_id
 ; --스티븐 킹만 나와야 하는데 왜 3명 같이 딸려 나오는 걸까?
+-- where 조건절 수정으로 해결. 같은 department의 steven 을 몽땅 불러왔다.
 
 
 
@@ -59,7 +71,8 @@ and last_name in ('King') ; --스티븐킹 불러오기 조건
 
 
 /*문제4.
-job_id 가 'ST_MAN' 인 직원의 급여보다 작은 직원의 사번,이름,급여를 급여의 내림차순으로 출력하세요  -ANY연산자 사용
+job_id 가 'ST_MAN' 인 직원의 급여보다 작은 직원의 사번,이름,급여를 
+급여의 내림차순으로 출력하세요  -ANY연산자 사용
 (74건) */
 
 select department_id, employee_id, first_name, salary, jojo.job_id
