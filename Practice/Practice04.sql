@@ -1,6 +1,8 @@
 /* Practice04 서브쿼리(SUBQUERY) SQL 문제입니다. */
 
 
+
+
 /*문제1.
 평균 급여보다 적은 급여을 받는 직원은 몇명인지 구하시요.
 (56건) */
@@ -47,6 +49,8 @@ and last_name = 'King'
 ; -- 정상동작하게 수정 성공
 
  
+ 
+--스티븐 킹만 나와야 하는데 왜 3명 같이 딸려 나오는 걸까?
 SELECT de.department_id, em.first_name, de.location_id, lo.street_address, lo.postal_code, lo.city, lo.state_province
 FROM employees em, departments de, locations lo
 where em.department_id = (
@@ -56,15 +60,8 @@ where em.department_id = (
                         and last_name in 'King' )
 and de.department_id = em.department_id
 and de.location_id = lo.location_id
-; --스티븐 킹만 나와야 하는데 왜 3명 같이 딸려 나오는 걸까?
+; 
 -- where 조건절 수정으로 해결. 같은 department의 steven 을 몽땅 불러왔다.
-
-
-
-SELECT  department_id
-FROM employees
-where first_name in ('Steven')
-and last_name in ('King') ; --스티븐킹 불러오기 조건
 
 
 
@@ -85,6 +82,28 @@ where (jojo.job_id, emem.salary) in (select jo.job_id, max(em.salary)
 
 
 
+
+
+select department_id, employee_id, first_name, salary, jo.job_id
+from employees em, jobs jo
+where salary <ANY (SELECT  job_id
+                    FROM jobs
+                    where job_id = ('ST_MAN'))
+;
+
+SELECT  em.salary 
+                    FROM employees em, jobs
+                    where job_id = ('ST_MAN')
+                    ;
+
+select first_name, salary
+from employees
+where salary <ANY (select salary
+from employees
+where department_id = 110);
+
+
+
 SELECT
     * FROM employees
     where salary >ALL (
@@ -101,7 +120,13 @@ SELECT
 (11건) */
 
 
+--각 부서별 최고급여 사원
 
+SELECT  first_name,
+        salary
+FROM employees, departments
+group by department_id
+;
 
 
 /*문제6.
