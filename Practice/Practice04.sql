@@ -72,6 +72,18 @@ job_id 가 'ST_MAN' 인 직원의 급여보다 작은 직원의 사번,이름,�
 급여의 내림차순으로 출력하세요  -ANY연산자 사용
 (74건) */
 
+select  employee_id, 
+        first_name, 
+        salary
+from    employees
+where   salary <any (select  salary
+                     from    employees
+                     where   job_id= 'ST_MAN')
+order by salary desc
+;   
+
+
+
 select department_id, employee_id, first_name, salary, jojo.job_id
 from employees emem, jobs jojo
 where (jojo.job_id, emem.salary) in (select jo.job_id, max(em.salary)
@@ -79,9 +91,6 @@ where (jojo.job_id, emem.salary) in (select jo.job_id, max(em.salary)
                                     group by jo.job_id
                                     having jo.job_id = ('ST_MAN'))
 ;  --좀더 생각해보자...
-
-
-
 
 
 select department_id, employee_id, first_name, salary, jo.job_id
@@ -114,7 +123,8 @@ SELECT
     
 
 /*문제5. 
-각 부서별로 최고의 급여를 받는 사원의 직원번호(employee_id), 이름(first_name)과 급여(salary) 부서번호(department_id)를 조회하세요 
+각 부서별로 최고의 급여를 받는 사원의 
+직원번호(employee_id), 이름(first_name)과 급여(salary) 부서번호(department_id)를 조회하세요 
 단 조회결과는 급여의 내림차순으로 정렬되어 나타나야 합니다. 
 조건절비교, 테이블조인 2가지 방법으로 작성하세요
 (11건) */
@@ -123,10 +133,27 @@ SELECT
 --각 부서별 최고급여 사원
 
 SELECT  first_name,
-        salary
-FROM employees, departments
-group by department_id
-;
+        salary,
+        department_id,
+        employee_id
+FROM employees
+where (department_id, salary) in (
+                                    SELECT department_id, max(salary)
+                                    from employees
+                                    group by department_id)
+; --조건절 비교
+
+
+
+SELECT  emp.first_name, emp.salary, emp.department_id, emp.employee_id
+FROM employees emp, (
+                    select department_id, max(salary) salary
+                    from employees
+                    group by department_id) sal
+where emp.department_id = sal.department_id
+and emp.salary = sal.salary
+; --테이블 조인
+
 
 
 /*문제6.
@@ -134,7 +161,10 @@ group by department_id
 연봉 총합이 가장 높은 업무부터 업무명(job_title)과 연봉 총합을 조회하시오 
 (19건) */
 
-
+SELECT sum(salary) 
+FROM employees emp, (
+)
+;
 
 
 /*문제7.
