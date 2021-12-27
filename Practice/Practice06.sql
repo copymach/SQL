@@ -8,6 +8,19 @@ drop table book;
 select * from book;
 select * from author;
 
+-- 책 정보 보기
+SELECT    * FROM book;
+
+-- 저자 정보 보기
+SELECT    * FROM author;
+
+-- 모든 정보 보기 (카디전)
+SELECT    * FROM book, author
+    where book.author_id = author.author_id;
+
+--시퀀스 조회
+SELECT * FROM USER_SEQUENCES;
+
 
 --저자 테이블 만들기
 create table author (
@@ -98,19 +111,10 @@ INSERT INTO book VALUES (seq_book_id.nextval, '오직두사람', '문학동네',
 INSERT INTO book VALUES (seq_book_id.nextval, '26년', '재미주의', '20120204', 5);
 
 
-
+-- 입력 서식
 INSERT INTO book VALUES (seq_book_id.nextval, 'title', 'pub', '20120815', id);
 
 
--- 책 정보 보기
-SELECT    * FROM book;
-
--- 저자 정보 보기
-SELECT    * FROM author;
-
--- 모든 정보 보기 (카디전)
-SELECT    * FROM book, author
-    where book.author_id = author.author_id;
 
 --강풀(id 5번)의 author_desc 를 서울 특별시로 변경하기
 UPDATE author
@@ -131,4 +135,7 @@ DELETE FROM author WHERE author_id = 4 ;
 --커밋 
 commit;
 
+
+--롤백
+rollback;
 
