@@ -1,8 +1,6 @@
 /* Practice04 서브쿼리(SUBQUERY) SQL 문제입니다. */
 
 
-
-
 /*문제1.
 평균 급여보다 적은 급여을 받는 직원은 몇명인지 구하시요.
 (56건) */
@@ -17,7 +15,8 @@ where salary < (
 
 /*문제2. 
 평균급여 이상, 최대급여 이하의 월급을 받는 사원의 
-직원번호(employee_id), 이름(first_name), 급여(salary), 평균급여, 최대급여를 급여의 오름차순으로 정렬하여 출력하세요 
+직원번호(employee_id), 이름(first_name), 급여(salary), 평균급여, 최대급여를 
+급여의 오름차순으로 정렬하여 출력하세요 
 (51건) */
 
 select employee_id, first_name, salary
@@ -69,12 +68,13 @@ and de.location_id = lo.location_id
 
 /*문제4.
 job_id 가 'ST_MAN' 인 직원의 급여보다 작은 직원의 사번,이름,급여를 
-급여의 내림차순으로 출력하세요  -ANY연산자 사용
+급여의 내림차순으로 출력하세요  -ANY연산자 사용 [ >any =or ]
 (74건) */
 
 select  employee_id, 
         first_name, 
-        salary
+        salary,
+        job_id
 from    employees
 where   salary <any (select  salary
                      from    employees
@@ -161,21 +161,82 @@ and emp.salary = sal.salary
 연봉 총합이 가장 높은 업무부터 업무명(job_title)과 연봉 총합을 조회하시오 
 (19건) */
 
-SELECT sum(salary) 
-FROM employees emp, (
-)
+
+select  jo.job_title, 
+        em.salary
+from    jobs jo, (select  job_id, sum(salary) salary
+                 from    employees
+                 group by job_id) em
+where   em.job_id= jo.job_id
+order by em.salary desc
 ;
 
 
+SELECT
+    * FROM employees, departments
+where salary >all (
+                    SELECT sum(salary) 
+                    FROM employees
+                    group by job_id)
+; --업무별로 연봉의 합 
+
+
 /*문제7.
-자신의 부서 평균 급여보다 연봉(salary)이 많은 직원의 직원번호(employee_id), 이름(first_name)과 급여(salary)을 조회하세요 
+자신의 부서 평균 급여보다 연봉(salary)이 많은 직원의 
+직원번호(employee_id), 이름(first_name)과 급여(salary)을 조회하세요 
 (38건) */
 
 
+select  em.employee_id, 
+        em.first_name, 
+        em.salary, 
+        em.department_id
+from    employees em, (select  department_id, avg(salary) salary
+                       from    employees              
+                       group by department_id) avgs
+where   em.department_id = avgs.department_id
+and     em.salary > avgs.salary
+;
+
+
+
+SELECT
+    * FROM employees
+    where salary >all (
+                        SELECT  avg(salary)
+                        FROM employees
+                        group by department_id)
+; --부서별 평균급여
 
 
 /*문제8.
-직원 입사일이 11번째에서 15번째의 직원의 사번, 이름, 급여, 입사일을 입사일 순서로 출력하세요
+직원 입사일이 11번째에서 15번째의 직원의 사번, 이름, 급여, 입사일을 
+입사일 순서로 출력하세요 rownum 사용
 */ 
+
+
+SELECT  rn, first_name, employee_id, salary, hire_date
+FROM  ( 
+        SELECT  rownum rn, first_name, employee_id, salary, hire_date
+        FROM (        
+                SELECT first_name, employee_id, salary, hire_date
+                FROM employees
+                order by hire_date asc)
+        )
+where   rn between 11 and 15
+;   
+
+--where rn >=11 and rn<=15
+
+
+
+SELECT  rownum, first_name, employee_id, salary, hire_date
+FROM (
+        SELECT first_name, employee_id, salary, hire_date
+        FROM employees
+        order by hire_date asc)
+; --입사일 순서대로 rownum출력
+
+
 
 
